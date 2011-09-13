@@ -91,32 +91,3 @@ d1(/, DL, DR, Result1) :- (DL=DR -> Result1 is 1 ; Result1 = DL/DR), !.
 
 d2(-, Term, Result1) :- number(Term), Result1 is -Term, !.
 d2(-, Term, Result1) :- Result1 = -Term, !.
-
-signremover([H|T], Output) :- H is -, Output = T, !.
-
-/*
-d2(-, Term, Result1) :- atom(Term), Result1 = -Term, !.
-
-d2(-, Term, Result1) :- 
-	Term =.. [Operator, Left, Right],
-	d2(-, Left, R1),
-	d2(-, Right, R2),
-	d3(Operator, R1, R2, Result1), !.
-	
-d3(+, R1, R2, Result1) :- Result1 = R1-R2, !.
-d3(-, R1, R2, Result1) :- Result1 = R1+R2, !.
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
