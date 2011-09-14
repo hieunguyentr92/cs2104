@@ -20,6 +20,12 @@ The expression above could be further simplified into:
 
 a-2*x-2
 
+
+READ HERE:
+Sample Run...
+
+simplify((1+0)*(a-x)+(x+2)*(0-1), C).
+
 */
 
 simplify(X, Result) :- number(X), Result is X, !.
