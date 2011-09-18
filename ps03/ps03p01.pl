@@ -24,24 +24,6 @@ All input/resulting images are 640x640
 montage(Expr, File).
 
 % beside takes in double arguments
-beside(Arg1, Arg2).
-
-beside(Arg1, Arg1) :-
-	write('convert +append '),
-	write(Arg1),
-	write(' '),
-	write(Arg2),
-	write(' '),
-	writeln(Output),
-	!.
 
 % rotate takes in single argument
-rotate(Arg).
-
-rotate(Arg) :-
-	write('convert -rotate 90 '),
-	write(Input),
-	write(' '),
-	writeln(Output),
-	!.
 	
