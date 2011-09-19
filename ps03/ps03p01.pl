@@ -23,6 +23,10 @@ All input/resulting images are 640x640
 montage(Expr, File) :- Expr =.. [Op, Arg1, Arg2],
 	montage(Arg1, F1),
 	montage(Arg2, F2),
+	(Op = beside
+		-> write('convert -scale 50%%x50%% '), write(F1), writeln('test'),
+		   write('convert -scale 50%%x50%% '), write(F2), writeln('test'),
+	),
 	!.
 	
 montage(Expr, File) :- Expr =.. [Op, Arg1],
@@ -32,4 +36,5 @@ montage(Expr, File) :- Expr =.. [Op, Arg1],
 	),
 	!.
 
+% no command, just atom
 montage(Expr, File) :- atom(Expr), File = Expr,!.
