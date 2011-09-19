@@ -20,15 +20,15 @@ All input/resulting images are 640x640
 :- op(200, yfx, beside).
 :- op(200, yfx, rotate).
 
-montage(Expr, File) :- atom(Expr), File=asd,!.
-
-% beside
 montage(Expr, File) :- Expr =.. [Op, Arg1, Arg2],
 	montage(Arg1, F1),
 	montage(Arg2, F2),
 	!.
 	
-% rotate
 montage(Expr, File) :- Expr =.. [Op, Arg1],
 	montage(Arg1, F1),
+	(Op = rotate
+		-> writeln("OK")
+	),
 	!.
+	
