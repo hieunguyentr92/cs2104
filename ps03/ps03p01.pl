@@ -20,6 +20,21 @@ All input/resulting images are 640x640
 :- op(200, yfx, beside).
 :- op(200, yfx, rotate).
 
+montage(Expr, Out) :-
+	atom(Expr),
+	image(Expr, 100, 100, Out),
+	!.
+
+image(Expr, Width, Height, Out) :-
+	atom(Expr),
+	write('convert -scale '),
+	write(Width), write('%%x'),
+	write(Height), write('%% '),
+	write(Expr), write('.jpg '),
+	write(Out), write('.jpg'),
+	writeln(''),
+	!.
+
 /*
 
 montage(Expr, File) :- Expr =.. [Op, Arg1, Arg2],
