@@ -28,7 +28,8 @@ montage(Expr, File) :- Expr =.. [Op, Arg1, Arg2],
 montage(Expr, File) :- Expr =.. [Op, Arg1],
 	montage(Arg1, F1),
 	(Op = rotate
-		-> writeln("OK")
+		-> write('convert -rotate 90 '), write(F1)
 	),
 	!.
-	
+
+montage(Expr, File) :- atom(Expr), File = Expr,!.
