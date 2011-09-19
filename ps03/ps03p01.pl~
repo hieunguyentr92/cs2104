@@ -2,7 +2,19 @@
 Heng Low Wee
 U096901R
 
-Problem Set 3 Problem 2
+Problem Set 3 Problem 1
+
+beside(Image1, Image2)
+side by side, horizontal 50%
+
+rotate(Image)
+rotate 90º clockwise
+
+scale(Image)
+scale by 50% horizontal only, vertical 100%
+
+All input/resulting images are 640x640
+
 */
 
 :- op(200, yfx, beside).
@@ -30,10 +42,3 @@ write('convert -rotate 90 '), write(F1), write('.jpg '), write(R), write('.jpg '
 
 % no command, just atom
 montage(Expr, File) :- atom(Expr), File = Expr,!.
-
-ma(Expr) :- Expr =.. [=, Var, Command],
-	montage(Command,F),
-	write(Var), write(' = '), write(F),
-	Var = F,
-	!.
-

@@ -31,17 +31,9 @@ write('convert -rotate 90 '), write(F1), write('.jpg '), write(R), write('.jpg '
 % no command, just atom
 montage(Expr, File) :- atom(Expr), File = Expr,!.
 
-ma(Expr) :- Expr =.. [Delim, Left, Right],
-	Left =.. [Op, Var, Val],
-	montage(Val,F),
-	assert(equals(Var,F)),
-	ma(Right),
+ma(Expr) :- Expr =.. [=, Var, Command],
+	montage(Command,F),
+	write(Var), write(' = '), write(F),
+	Var = F,
 	!.
-
-ma(Expr) :- Expr =.. [Delim, Left, Right],
-	atom(Left),
-	montage(Right,F),
-	assert(equals(Left, F),
-	!.
-	
 

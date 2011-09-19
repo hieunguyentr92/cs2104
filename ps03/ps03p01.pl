@@ -20,6 +20,8 @@ All input/resulting images are 640x640
 :- op(200, yfx, beside).
 :- op(200, yfx, rotate).
 
+/*
+
 montage(Expr, File) :- Expr =.. [Op, Arg1, Arg2],
 	montage(Arg1, F1),
 	montage(Arg2, F2),
@@ -42,3 +44,4 @@ write('convert -rotate 90 '), write(F1), write('.jpg '), write(R), write('.jpg '
 
 % no command, just atom
 montage(Expr, File) :- atom(Expr), File = Expr,!.
+*/
