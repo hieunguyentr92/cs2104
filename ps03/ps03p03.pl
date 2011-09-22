@@ -32,6 +32,10 @@ tile(0, In, Out) :-
 	!.
 	
 tile(N, In, Out) :-
+	N1 is N-1,
+	atom_concat(Out, 't1', Out1),
+	tile(N1, In, Out1),
+	s(Out1, In, Out),
 	!.
 	
 % In and Add assumed same size
