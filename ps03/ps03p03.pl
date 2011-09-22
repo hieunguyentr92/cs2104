@@ -65,51 +65,6 @@ s(In, Add, Out) :-
 	b(Out9, Out10, Out11),
 	scale(Out11, 50, 50, Out),
 	!.
-
-ma(Expr) :-
-	Expr =.. [;, Left, Right],
-	Left =.. [=, X, Cmd],
-	montage(Cmd, X),
-	ma(Right),
-	!.
-	
-ma(Expr) :-
-	Expr =.. [=, X, Cmd],
-	montage(Cmd, X),
-	!.
-
-montage(Expr, Out) :-
-	atom(Expr),
-	scale(Expr, 100, 100, Out),
-	!.
-	
-montage(Expr, Out) :-
-	Expr =.. [rotate, Arg1],
-	atom(Arg1),
-	r(Arg1, Out),
-	!.
-	
-montage(Expr, Out) :-
-	Expr =.. [rotate, Arg1],
-	atom_concat(Out, '3', Out1),
-	montage(Arg1, Out1),
-	r(Out1, Out),
-	!.
-	
-montage(Expr, Out) :-
-	Expr =.. [beside, Arg1, Arg2],
-	atom(Arg1), atom(Arg2),
-	b(Arg1, Arg2, Out),
-	!.
-	
-montage(Expr, Out) :-
-	Expr =.. [beside, Arg1, Arg2],
-	atom_concat(Out, '4', Out1),
-	atom_concat(Out, '5', Out2),
-	montage(Arg1, Out1),
-	montage(Arg2, Out2),
-	b(Out1, Out2, Out),
-	!.
 	
 b(Arg1, Arg2, Out) :-
 	atom(Arg1), atom(Arg2),
