@@ -32,19 +32,11 @@ tile(0, In, Out) :-
 	!.
 	
 tile(N, In, Out) :-
-	N > 0,
-	W is 100 * 0.5^N,
-	atom_concat(Out, '1', Out1),
-	atom_concat(Out, '2', Out2),
-	atom_concat(Out, '3', Out3),
-	scale(In, W, W, Out1),
-	scale(In, W, W, Out2),
-	su(Out1, Out2, Out3),
-	N1 is N-1,
-	tile(N1, Out3, Out),
 	!.
 	
-su(In, Add, Out) :-
+% In and Add assumed same size
+% Will put them together and when done, reduce size to In.
+s(In, Add, Out) :-
 	atom_concat(Out, 's1', Out1),
 	atom_concat(Out, 's2', Out2),
 	atom_concat(Out, 's3', Out3),
@@ -63,9 +55,11 @@ su(In, Add, Out) :-
 	b(Add, Out4, Out8),
 	atom_concat(Out, 's9', Out9),
 	atom_concat(Out, 's10', Out10),
+	atom_concat(Out, 's11', Out11),
 	r(Out7, Out9),
 	r(Out8, Out10),
-	b(Out9, Out10, Out),
+	b(Out9, Out10, Out11),
+	scale(Out11, 50, 50, Out),
 	!.
 
 ma(Expr) :-
