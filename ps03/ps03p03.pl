@@ -4,29 +4,6 @@ U096901R
 
 Problem Set 3 Problem 3
 */
-
-/*
-tile(0, In, Out) :-
-	atom_concat(Out, '1', Out1),
-	atom_concat(Out, '2', Out2),
-	atom_concat(Out, '3', Out3),
-	atom_concat(Out, '4', Out4),
-	atom_concat(Out, '5', Out5),
-	atom_concat(Out, '6', Out6),
-	atom_concat(Out, '7', Out7),
-	atom_concat(Out, '8', Out8),
-	scale(In, 100, 100, Out1),
-	r(Out1, Out2),
-	r(Out2, Out3),
-	r(Out3, Out4),
-	b(Out4, Out3, Out5),
-	r(Out5, Out6),
-	b(Out1, Out2, Out7),
-	r(Out7, Out8),
-	b(Out6, Out8, Out),
-	!.
-*/
-
 tile(0, In, Out) :-
 	scale(In, 100, 100, Out),
 	!.
