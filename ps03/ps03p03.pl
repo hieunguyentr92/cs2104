@@ -5,11 +5,7 @@ U096901R
 Problem Set 3 Problem 3
 */
 
-
-
-% In is assumed already scaled, so Out consists of 4 In
-tile(0, In, Out) :- !.
-
+/*
 tile(0, In, Out) :-
 	atom_concat(Out, '1', Out1),
 	atom_concat(Out, '2', Out2),
@@ -28,6 +24,48 @@ tile(0, In, Out) :-
 	b(Out1, Out2, Out7),
 	r(Out7, Out8),
 	b(Out6, Out8, Out),
+	!.
+*/
+
+tile(0, In, Out) :-
+	scale(In, 100, 100, Out),
+	!.
+	
+tile(N, In, Out) :-
+	N > 0,
+	W is 100 * 0.5^N,
+	atom_concat(Out, '1', Out1),
+	atom_concat(Out, '2', Out2),
+	atom_concat(Out, '3', Out3),
+	scale(In, W, W, Out1),
+	scale(In, W, W, Out2),
+	su(Out1, Out2, Out3),
+	N1 is N-1,
+	tile(N1, Out3, Out),
+	!.
+	
+su(In, Add, Out) :-
+	atom_concat(Out, 's1', Out1),
+	atom_concat(Out, 's2', Out2),
+	atom_concat(Out, 's3', Out3),
+	r(In, Out1),
+	r(Out1, Out2),
+	r(Out2, Out3),
+	atom_concat(Out, 's4', Out4),
+	atom_concat(Out, 's5', Out5),
+	atom_concat(Out, 's6', Out6),
+	atom_concat(Out, 's7', Out7),
+	atom_concat(Out, 's8', Out8),
+	r(Add, Out4),
+	r(Out4, Out5),
+	r(Out5, Out6),
+	b(Out3, Out5, Out7),
+	b(Add, Out4, Out8),
+	atom_concat(Out, 's9', Out9),
+	atom_concat(Out, 's10', Out10),
+	r(Out7, Out9),
+	r(Out8, Out10),
+	b(Out9, Out10, Out),
 	!.
 
 ma(Expr) :-
