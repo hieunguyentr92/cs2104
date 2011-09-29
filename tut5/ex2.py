@@ -14,4 +14,5 @@ def list2dict(list1):
 		
 	
 list2dict(mylist)
+print mylist
 print mydict
