@@ -6,7 +6,7 @@ mylist = ["a", 123, "b", 234, "c", 345]
 mydict = {}
 
 def list2dict(list1):
-	for i in xrange(0, len(list1),2):
+	for i in range(0, len(list1),2):
 		# iterating even index
 		key = list1[i]
 		val = list1[i+1]
