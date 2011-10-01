@@ -18,15 +18,15 @@ Test Case : fractal(g = (g;left(45);g;right(90);g;left(45);g),3,30).
 
 */
 
-fractal(_=_, 0, L) :-
+/*fractal(_=_, 0, L) :-
 	write('forward('), write(L), writeln(')'),
-	!.
+	!.*/
 
 fractal(X=(Expr),K,L) :-
 	fractal(X, Expr, Expr, K, L),
 	!.
 	
-fractal(X, X, _, 1, L) :-
+fractal(_, _, _, 0, L) :-
 	write('forward('), write(L), writeln(')'),
 	!.
 	
