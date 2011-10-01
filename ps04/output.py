@@ -1,4 +1,4 @@
 from turtle import *
 import time
-hello
+shake
 time.sleep(30)
