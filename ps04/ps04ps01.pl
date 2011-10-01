@@ -9,7 +9,7 @@ fractal(X=Expr, K, Length) :-
 :- tell('output.py'),
 	writeln('from turtle import *'),
 	writeln('import time'),
- 	fractal(X=Expr, K, Length),
+ 	fractal(g=hello,2,2),
 	writeln('time.sleep(30)'),
 	told,
 	!.

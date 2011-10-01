@@ -1,4 +1,4 @@
 from turtle import *
 import time
-_G570
+hello
 time.sleep(30)
