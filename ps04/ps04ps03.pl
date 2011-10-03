@@ -1,6 +1,6 @@
 /*HENG LOW WEE
 U096901R
-Problem Set 4 Problem 2*/
+Problem Set 4 Problem 3*/
 
 :- op(1099,yf,;).
 :- op(960,fx,if).
@@ -31,16 +31,6 @@ compileExpr(Exp,Ein,Eout,Tin,Tout) :-
 	write('    eax '), write(O), writeln('= ecx ;'),
 	write('    esp -= 4 ; *(int*)&M[esp] = eax ; // push result of '),
 	writeln(O).
-	
-% snakes on the plane
-compile((V1,V2)=(E1,E2),Ein,Eout,Tin,Tout,L,L) :-
-	% compute right-hand side first
-	compileExpr(E1,Ein,Eaux1,Tin,Taux1),
-	compileExpr(E2,Ein,Eaux2,Tin,Taux2),
-	% assign computed results to left-hand side
-	compile(V1=),
-	compile(V2=),
-	!.
 
 compile(V=E,Ein,Eout,Tin,Tout,L,L) :-
 	compileExpr(E,Ein,Eaux,Tin,Taux),
