@@ -34,12 +34,22 @@ compileExpr(Exp,Ein,Eout,Tin,Tout) :-
 	
 % snakes on the plane
 compile((V1,V2)=(E1,E2),Ein,Eout,Tin,Tout,L,L) :-
-	% compute all the right-hand side first
-	compileExpr(E1,Ein,Eaux,Tin,Tout),
-	compileExpr(E2,Ein,Eaux,Tin,Tout),
-	% assign computed results to left-hand side
-	compile(V1=E1,Ein,Eout,Tin,Tout,L,L),
-	compile(V2=E2,Ein,Eout,Tin,Tout,L,L),
+	compileExpr(E1,Ein,Eaux,Tin,Taux),
+	writeln('    ebx = eax ;'),
+	compileExpr(E2,Eaux,Eout,Taux,Tout),
+	writeln('    edx = eax ;'),
+	( member((V1->Addr), Eout)
+	->  Tout = Taux, Eout = Eaux
+	;   Tout is Taux+4, Eout = [(V1->Taux)|Eaux], Addr = Taux),
+	writeln('    ecx = ebx ;'),
+	write('    *(int*)&M['),write(Addr),write('] = ecx ; // pop '),
+	writeln(V1),
+	( member((V2->Addr1), Eout)
+	->  Tout = Taux, Eout = Eaux
+	;   Tout is Taux+4, Eout = [(V2->Taux)|Eaux], Addr1 = Taux),
+	writeln('    ecx = edx ;'),
+	write('    *(int*)&M['),write(Addr1),write('] = ecx ; // pop '),
+	writeln(V2),
 	!.
 
 compile(V=E,Ein,Eout,Tin,Tout,L,L) :-
@@ -132,6 +142,7 @@ outputVars([(V->Addr)|T]) :-
                 x = x - y ;
              } ;
           } ;
-		  (x,y) = (y+1,x) ;
+		  (x,y) = (y+1,x+2) ;
+		  % original we have x=12 & y=12. Now we should get x=13, y=14.
        ),
 	compileProg(P).
