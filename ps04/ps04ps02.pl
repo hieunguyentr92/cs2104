@@ -34,12 +34,12 @@ compileExpr(Exp,Ein,Eout,Tin,Tout) :-
 	
 % snakes on the plane
 compile((V1,V2)=(E1,E2),Ein,Eout,Tin,Tout,L,L) :-
-	% compute right-hand side first
-	compileExpr(E1,Ein,Eaux1,Tin,Taux1),
-	compileExpr(E2,Ein,Eaux2,Tin,Taux2),
+	% compute all the right-hand side first
+	compileExpr(E1,Ein,Eaux,Tin,Tout),
+	compileExpr(E2,Ein,Eaux,Tin,Tout),
 	% assign computed results to left-hand side
-	compile(V1=),
-	compile(V2=),
+	compile(V1=E1,Ein,Eout,Tin,Tout,L,L),
+	compile(V2=E2,Ein,Eout,Tin,Tout,L,L),
 	!.
 
 compile(V=E,Ein,Eout,Tin,Tout,L,L) :-
@@ -132,5 +132,6 @@ outputVars([(V->Addr)|T]) :-
                 x = x - y ;
              } ;
           } ;
+		  (x,y) = (y+1,x) ;
        ),
 	compileProg(P).
