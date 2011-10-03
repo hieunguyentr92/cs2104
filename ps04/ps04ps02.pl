@@ -35,18 +35,22 @@ compileExpr(Exp,Ein,Eout,Tin,Tout) :-
 % snakes on the plane
 compile((V1,V2)=(E1,E2),Ein,Eout,Tin,Tout,L,L) :-
 	compileExpr(E1,Ein,Eaux,Tin,Taux),
-	writeln('    ebx = eax ;'),
-	compileExpr(E2,Eaux,Eout,Taux,Tout),
-	writeln('    edx = eax ;'),
-	( member((V1->Addr), Eout)
-	->  Tout = Taux, Eout = Eaux
-	;   Tout is Taux+4, Eout = [(V1->Taux)|Eaux], Addr = Taux),
+	writeln('    ebx = *(int*)&M[esp] ;'),			
+	compileExpr(E2,Eaux,Eaux1,Taux,Taux1),
+	writeln('    edx = *(int*)&M[esp] ;'),
+	
+	( member((V1->Addr), Eaux)
+	->  Taux1 = Taux, Eaux1 = Eaux
+	;   Taux1 is Taux+4, Eaux1 = [(V1->Taux)|Eaux], Addr = Taux),
+	
 	writeln('    ecx = ebx ;'),
 	write('    *(int*)&M['),write(Addr),write('] = ecx ; // pop '),
 	writeln(V1),
-	( member((V2->Addr1), Eout)
-	->  Tout = Taux, Eout = Eaux
-	;   Tout is Taux+4, Eout = [(V2->Taux)|Eaux], Addr1 = Taux),
+	
+	( member((V2->Addr1), Eaux1)
+	->  Tout = Taux1, Eout = Eaux1
+	;   Tout is Taux1+4, Eout = [(V2->Taux1)|Eaux1], Addr1 = Taux1),
+	
 	writeln('    ecx = edx ;'),
 	write('    *(int*)&M['),write(Addr1),write('] = ecx ; // pop '),
 	writeln(V2),
@@ -136,13 +140,12 @@ outputVars([(V->Addr)|T]) :-
           x = 144 ;
           y = 60 ;
           while ( x \= y ) do {
-             if ( x < y ) then {
-                y = y - x ;
-             } else {
+          	if ( x < y ) then {
+            	y = y - x ;
+            } else {
                 x = x - y ;
-             } ;
+            } ;
           } ;
-		  (x,y) = (y+1,x+2) ;
-		  % original we have x=12 & y=12. Now we should get x=13, y=14.
+		  (x,y) = (x+y, x-y) ; % originally: x=12,y=12. we should get x=24,y=0
        ),
 	compileProg(P).
