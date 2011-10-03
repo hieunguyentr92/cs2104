@@ -32,7 +32,7 @@ compileExpr(Exp,Ein,Eout,Tin,Tout) :-
 	write('    esp -= 4 ; *(int*)&M[esp] = eax ; // push result of '),
 	writeln(O).
 	
-% snakes on the plane
+% SNAKES ON THE PLANE
 compile((V1,V2)=(E1,E2),Ein,Eout,Tin,Tout,L,L) :-
 	compileExpr(E1,Ein,Eaux,Tin,Taux),
 	writeln('    ebx = *(int*)&M[esp] ;'),			
