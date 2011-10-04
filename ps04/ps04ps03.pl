@@ -7,6 +7,7 @@ Problem Set 4 Problem 3*/
 :- op(959,xfx,then).
 :- op(958,xfx,else).
 :- op(960,fx,while).
+:- op(960,fx,for).
 :- op(959,xfx,do).
 
 compileExpr(K,E,E,T,T) :-
@@ -84,6 +85,15 @@ compile(while B do S,Ein,Eout,Tin,Tout,Lin,Lout) :- !,
 	compile(S,Ea2,Eout,Ta2,Tout,La1,Lout),
 	write('    goto Lwhile'),write(Lin),writeln(';'),
 	write('Lendwhile'),write(Lin),writeln(':').
+	
+% You spin my head right round right round
+compile(for (S1;S2;S3) do S4,Ein,Eout,Tin,Tout,Lin,Lout) :- !,
+	compileExpr(S1,Ein,Ea1,Tin,Ta1),
+	compile(while S2 do S).
+	
+	
+	
+
 compile(S1;S2,Ein,Eout,Tin,Tout,Lin,Lout) :- !,
 	compile(S1,Ein,Eaux,Tin,Taux,Lin,Laux),
 	compile(S2,Eaux,Eout,Taux,Tout,Laux,Lout).
@@ -113,14 +123,9 @@ outputVars([(V->Addr)|T]) :-
 	outputVars(T).
 
 :- P = (
-          x = 144 ;
-          y = 60 ;
-          while ( x \= y ) do {
-             if ( x < y ) then {
-                y = y - x ;
-             } else {
-                x = x - y ;
-             } ;
-          } ;
+		s = 0 ;
+		for ( i = 0 ; i < 10 ; i = i + 1 ) do {
+			s = s + i ;
+		} ;
        ),
 	compileProg(P).
