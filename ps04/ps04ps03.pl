@@ -88,12 +88,8 @@ compile(while B do S,Ein,Eout,Tin,Tout,Lin,Lout) :- !,
 	
 % You spin my head right round right round
 compile(for (S1;S2;S3) do S4,Ein,Eout,Tin,Tout,Lin,Lout) :- !,
-	compileExpr(S1,Ein,Ea1,Tin,Ta1),
-	compile(while S2 do S).
+	compile(S1; while S2 do {S4;S3},Ein,Eout,Tin,Tout,Lin,Lout).
 	
-	
-	
-
 compile(S1;S2,Ein,Eout,Tin,Tout,Lin,Lout) :- !,
 	compile(S1,Ein,Eaux,Tin,Taux,Lin,Laux),
 	compile(S2,Eaux,Eout,Taux,Tout,Laux,Lout).
