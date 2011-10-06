@@ -87,7 +87,7 @@ compile(while B do S,Ein,Eout,Tin,Tout,Lin,Lout) :- !,
 	write('Lendwhile'),write(Lin),writeln(':').
 	
 % You spin my head right round right round
-compile(for (S1;S2;S3) do S4,Ein,Eout,Tin,Tout,Lin,Lout) :- !,
+compile(for (S1;S2;S3) do S4,Ein,Eout,Tin,Tout,Lin,Lout) :- !, 
 	compile(S1; while S2 do {S4;S3},Ein,Eout,Tin,Tout,Lin,Lout).
 	
 compile(S1;S2,Ein,Eout,Tin,Tout,Lin,Lout) :- !,
