@@ -1,0 +1,1 @@
+main = foldr (\x (b,c) -> (if c==0 then x:(10:b) else x:b,c+1)) ([],0) [1,2,3]
