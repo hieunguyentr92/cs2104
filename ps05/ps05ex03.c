@@ -8,7 +8,7 @@
 // function declaration
 double halfInterval(double (*f)(double), double x1, double x2, double esp);
 
-
+// this function is to test a custom function
 double g_x(double x) {
 	return x*x;
 }
