@@ -1,7 +1,7 @@
 declare
-proc {Fermat X}
+fun {Fermat X}
     case X
-    of 2 then {Browse 'Hello World'}
+    of 2 then 2
     end
 end
-{Fermat 2}
+{Browse {Fermat 2}}
