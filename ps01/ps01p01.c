@@ -4,8 +4,8 @@
 // Problem Set 1
 
 // Problem 1
-#include<stdio.h>
-#include<string.h>
+#include <stdio.h>
+#include <string.h>
 
 int eax, ebx, ecx, edx, esi, edi;
 // esi is the pointer to the string
