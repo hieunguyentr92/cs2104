@@ -1,7 +1,9 @@
 declare
 fun {Fermat X}
-    case X
-    of 2 then 2
+    if X<=2 then 2
+    else
+        proc {Helper X}
+        end
     end
 end
 {Browse {Fermat 2}}
