@@ -14,7 +14,7 @@ esp -= 4 ; *(int*)&M[esp] = eax ; // push eax
 esp -= 4 ; *(int*)&M[esp] = ecx ; // push ecx
 esp -= 4 ; *(int*)&M[esp] = edx ; // push edx
 esp -= 4 ; *(int*)&M[esp] = 5 ; // push 5
-esp -= 4 ; *(int*)&M[esp] = 1 ; // push 10
+esp -= 4 ; *(int*)&M[esp] = 10 ; // push 10
 eax = (int) && return_address ;
 //printf("eax = %d\n", eax);
 esp -= 4 ; *(int*)&M[esp] = eax ; // push return addr
@@ -68,7 +68,7 @@ return_address1:
 	esp -= 4 ; *(int*)&M[esp] = eax ; // push return addr 
 	goto f;
 return_address2:
-	esp += 4 ; // clear arguments
+	esp += 8 ; // clear arguments
 	edx = *(int*)&M[esp] ; esp += 4 ; // restore edx
 	ecx = *(int*)&M[esp] ; esp += 4 ; // restore edx
 	*(int*)&M[ebp-20] = eax ; // y = return value
@@ -94,7 +94,7 @@ int pascal (int n, int k) {
 }
 
 int main() {
-	printf("C pascal(10,5) = %d\n", pascal(10,5));
+	//printf("C pascal(10,5) = %d\n", pascal(10,5));
 	exec();
 	printf("eax = %d\n", eax);
 	return 0;
