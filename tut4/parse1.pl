@@ -1,17 +1,3 @@
-/*
-<expr>     ::= <subexpr> <term>
-<subexpr>  ::= <subexpr> <term> [’+’|’-’]
-             | <>
-<term>     ::= <subterm> <factor>
-<subterm>  ::= <subterm> <factor> [’*’|’/’]
-             | <>
-<factor>   ::= <base> <restexp>
-<restexp>  ::= ’^’ <base> <restexp>
-             | <>
-<base> 	   ::= ’(’ <expr> ’)’ |a|b|c|d
-*/
-
-
 expr(S) :-
 	constrain(S,S2,[],[S1,S2],["+","-"]),
 	!,subexpr(S1), term(S2).
