@@ -10,14 +10,13 @@ unsigned char M[10000];
 void exec() {
 esp = 10000;
 
-esp -= 4 ; *(int*)&M[esp] = eax ; // push eax
-esp -= 4 ; *(int*)&M[esp] = ecx ; // push ecx
-esp -= 4 ; *(int*)&M[esp] = edx ; // push edx
-esp -= 4 ; *(int*)&M[esp] = 5 ; // push 5
-esp -= 4 ; *(int*)&M[esp] = 10 ; // push 10
+esp -= 4 ; *(int*)&M[esp] = eax ;
+esp -= 4 ; *(int*)&M[esp] = ecx ;
+esp -= 4 ; *(int*)&M[esp] = edx ;
+esp -= 4 ; *(int*)&M[esp] = 5 ;
+esp -= 4 ; *(int*)&M[esp] = 10 ;
 eax = (int) && return_address ;
-//printf("eax = %d\n", eax);
-esp -= 4 ; *(int*)&M[esp] = eax ; // push return addr
+esp -= 4 ; *(int*)&M[esp] = eax ;
 goto f ;
 
 f:
