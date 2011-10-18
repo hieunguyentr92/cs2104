@@ -5,6 +5,5 @@ qsort([X|Xs], Results) :-
 	append(R1, [X|R2], Results).
 
 part(_,[],[],[]) :- !.
-part(P, [X|Xs], Left, [X|Right]) :- X>=P, part(P,Xs,Left,Right).
+part(P, [X|Xs], Left, [X|Right]) :- X>=P, !,part(P,Xs,Left,Right).
 part(P, [X|Xs], [X|Left], Right) :- X<P, part(P,Xs,Left,Right).
-	

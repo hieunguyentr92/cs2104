@@ -39,6 +39,7 @@ base(S,T!) :-
         factarg(S1,T).
 base(S,T) :- factarg(S,T).
 
+% this part used to be the <base>
 factarg(S,T) :- append(["(",S1,")"],S), !, expr(S1,T).
 factarg([S],A) :- 97 =< S, S =< 122, char_code(A,S).
 

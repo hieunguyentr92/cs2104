@@ -22,4 +22,3 @@ compile(Expr) :-
 	compile(Left),
 	compile(Right),
 	writer(Op).
-
