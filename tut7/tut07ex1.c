@@ -30,7 +30,8 @@ f:
 	// get value of n and k
 	ebx = *(int*)&M[ebp+8] ;
 	edi = *(int*)&M[ebp+12] ;
-	if (ebx == 0 || ebx == edi) goto then_branch;
+	if (ebx == 0) goto then_branch;
+	if (ebx == edi) goto then_branch;
 	goto skip;
 
 	then_branch:
@@ -54,15 +55,17 @@ return_address1:
 	edx = *(int*)&M[esp] ; esp += 4 ; // restore edx
 	ecx = *(int*)&M[esp] ; esp += 4 ; // restore ecx
 	*(int*)&M[ebp-16] = eax ; // x = return value
-	printf("eax = %d\n", eax);
 	eax = *(int*)&M[esp] ; esp += 4 ; // restore eax
 
 	esp -= 4 ; *(int*)&M[esp] = eax ; // push eax
 	esp -= 4 ; *(int*)&M[esp] = ecx ; // push ecx
 	esp -= 4 ; *(int*)&M[esp] = edx ; // push edx
+	eax = *(int*)&M[ebp+12] ;
+	eax -= 1 ;
+	esp -= 4 ; *(int*)&M[esp] = eax ; // push k-1
 	eax = *(int*)&M[ebp+8] ;
-	eax -= 2 ;
-	esp -= 4 ; *(int*)&M[esp] = eax ; // push n-2
+	eax -= 1 ;
+	esp -= 4 ; *(int*)&M[esp] = eax ; // push n-1
 	eax = (int) && return_address2 ;
 	esp -= 4 ; *(int*)&M[esp] = eax ; // push return addr 
 	goto f;
@@ -72,9 +75,8 @@ return_address2:
 	ecx = *(int*)&M[esp] ; esp += 4 ; // restore edx
 	*(int*)&M[ebp-20] = eax ; // y = return value
 	eax = *(int*)&M[esp] ; esp += 4 ; // restore eax
-
-	eax = *(int*)&M[ebp-16] ; // load x
-	eax += *(int*)&M[ebp-20] ; // add y, return value set now
+	eax = *(int*)&M[ebp-16] ; // load LHS
+	eax += *(int*)&M[ebp-20] ; // add RHS, return value set now
 
 exit_f:
 	esp += 8 ; // clear local vars
@@ -93,7 +95,7 @@ int pascal (int n, int k) {
 }
 
 int main() {
-	//printf("C pascal(10,5) = %d\n", pascal(10,5));
+	printf("C pascal(10,5) = %d\n", pascal(10,5));
 	exec();
 	printf("eax = %d\n", eax);
 	return 0;
