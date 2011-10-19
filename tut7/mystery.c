@@ -12,7 +12,7 @@ int f(int n, int k) {
 // into a tail-recursive one, which is simply better
 
 int champ(int n, int k) {
-	int aux(int n, int k, int (*k)(int)) {
+	int aux(int n, int k, int (*c)(int)) {
 		int c1(int r1) {
 			int c2(int r2) {
 				int c3(int r3) {
@@ -22,7 +22,7 @@ int champ(int n, int k) {
 			}
 			return aux(n-1,k-1,c2);
 		}
-		if (n==0 || n=k) return c(1);
+		if (n==0 || n==k) return c(1);
 		else return aux(n-1,k,c1);
 	}
 	int identity(int x) { return x; }
