@@ -35,7 +35,11 @@ void exec() {
 	esp -= 4 ; *(int*)&M[esp] = eax ; // push eax
 	esp -= 4 ; *(int*)&M[esp] = ecx ; // push ecx
 	esp -= 4 ; *(int*)&M[esp] = edx ; // push edx
-	esp -= 4 ; // push in char ** p here
+	esp -= 4 ; *(int*)&M[esp] = 3 ; // push c
+	esp -= 4 ; *(int*)&M[esp] = 2 ; // push b
+	esp -= 4 ; *(int*)&M[esp] = 1 ; // push a
+	esp -= 4 ; *(int*)&M[esp] = 4 ; // push n
+	esp -= 4 ; // push in char ** p here // push p
 	eax = (int) && return_address ;
 	esp -= 4 ; *(int*)&M[esp] = eax ; // push return_address
 	goto hanoi;
@@ -46,18 +50,28 @@ void exec() {
 		esp -= 4 ; *(int*)&M[esp] = ebx ; // push ebx
 		esp -= 4 ; *(int*)&M[esp] = edi ; // push edi
 		esp -= 4 ; *(int*)&M[esp] = esi ; // push esi
-		
+		// there is no declaration of local variables
+		// so no need to allocate space for local variables
+
+		// get value of n
+		eax = *(int*)&M[ebp+999];
 		// check if n = 0
-		if (*(int*)&M[ebp+999] == 0) goto exit_hanoi;
+		if (eax == 0) goto exit_hanoi;
+
 		// set up for next call
 		esp -= 4 ; *(int*)&M[esp] = eax ; // push eax
 		esp -= 4 ; *(int*)&M[esp] = ecx ; // push ecx
 		esp -= 4 ; *(int*)&M[esp] = edx ; // push edx
+		// get a, b, c
+		esp -= 4 ; *(int*)&M[esp] = 4 ; // push b
+		esp -= 4 ; *(int*)&M[esp] = 4 ; // push c
+		esp -= 4 ; *(int*)&M[esp] = 4 ; // push a
+		esp -= 4 ; *(int*)&M[esp] = 4 ; // push n-1
 		esp -= 4 ; // push in char ** p here
 		eax = (int) && proc ;
 		esp -= 4 ; *(int*)&M[esp] = eax ; // push return_address
 		goto hanoi;
-
+	
 	proc:
 		**p = '0'+(char)a ;
 		(*p) ++ ;
@@ -73,30 +87,25 @@ void exec() {
 		(*p) ++ ;
 		**p = '\n' ;
 		(*p) ++ ;
+
 		// set up for next call
 		esp -= 4 ; *(int*)&M[esp] = eax ; // push eax
 		esp -= 4 ; *(int*)&M[esp] = ecx ; // push ecx
 		esp -= 4 ; *(int*)&M[esp] = edx ; // push edx
+		// get a, b, c
+		esp -= 4 ; *(int*)&M[esp] = 4 ; // push a
+		esp -= 4 ; *(int*)&M[esp] = 4 ; // push b
+		esp -= 4 ; *(int*)&M[esp] = 4 ; // push c
+		esp -= 4 ; *(int*)&M[esp] = 4 ; // push n-1
 		esp -= 4 ; // push in char ** p here
-		eax = (int) && exit_proc ;
-		esp -= 4 ; *(int*)&M[esp] = eax ;
+		eax = (int) && proc ;
+		esp -= 4 ; *(int*)&M[esp] = eax ; // push return_address
 		goto hanoi;
 
-	exit_proc:
-		ebp = *(int*)&M[esp] ; esp += 999 ;
-		esp += 4 ; goto * * (void**)&M[esp-999] ; // return
-	{}
-
 	exit_hanoi:
-		// n==0, return and continue on proc
-		// clear local vars
-		// callee
-		// registers
-		ebp = *(int*)&M[esp] ; esp += 999 ;
-		esp += 4 ; goto * * (void**)&M[esp-999] ; // return
-
-	return_address:
-	{}
+		// some clearing here?
+		esp += 4 ; goto * *(void**)&M[esp-4] ; // go to proc
+	return_address: {}
 }
 
 int main() {
