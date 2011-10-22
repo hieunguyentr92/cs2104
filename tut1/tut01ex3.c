@@ -28,9 +28,8 @@ int main() {
 	int a[] = {11,51,23,66,34};
 	ecx = 5;
 	ebx = (int*)memcpy(M[2000], a, ecx*4);
+	// multiply by 4 because int is 4 bytes
 	printf("ebx = %d\n", ebx);
-	//printf("ebx = %d\n", ebx);
-	// multiply by 4 because int is 4bytes
 	exec();
 	printf("Mininum = %d\n", eax);
 	return 0;
