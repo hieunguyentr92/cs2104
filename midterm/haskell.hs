@@ -1,1 +1,1 @@
-removeDuplicate = foldl (\a b -> if (b == (last a)) then a else a++[b]) [head l] l
+removeDuplicate l = foldl (\a b -> if (b == (last a)) then a else a++[b]) [head l] l
