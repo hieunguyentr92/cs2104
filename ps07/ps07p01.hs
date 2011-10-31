@@ -51,7 +51,8 @@ clock = not_gate clock
 
 -- and gate delays its output by 2 clock cycles
 and_gate :: [Bool] -> [Bool] -> [Bool]
-and_gate i1 i2 = delay 2 True (zipWith (&&) i1 i2)
+--and_gate i1 i2 = delay 2 True (zipWith (&&) i1 i2)
+and_gate i1 i2 = (zipWith (&&) i1 i2)
                                -- "zipWith" is similar to map
 							   -- but it takes a binary operator
 							   -- and two lists, and produces
