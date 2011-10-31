@@ -113,6 +113,14 @@ srneg_latch s r =
 --    1  |  0  | Set Q=1
 --    1  |  1  | Toggle Q
 
+jkflipper :: Bool -> Bool -> Bool -> Bool
+--jkflipper j c k
+jkflipper False c False = c
+jkflipper False _ True = False
+jkflipper True _ False = True
+jkflipper True c True = if (c==True) then False else True
+
 jk_gate :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
 jk_gate z (a:as) (b:bs) (c:cs) = z a b c : jk_gate z as bs cs
 jk_gate _ _ _ _ = []
+
