@@ -115,12 +115,12 @@ srneg_latch s r =
 --    1  |  0  | Set Q=1
 --    1  |  1  | Toggle Q
 
+--jkflipper j k q
 jkflipper :: Bool -> Bool -> Bool -> Bool
---jkflipper j c k
-jkflipper False c False = c
-jkflipper False _ True = False
-jkflipper True _ False = True
-jkflipper True c True = if (c==True) then False else True
+jkflipper False False q = q
+jkflipper False True _ = False
+jkflipper True False _ = True
+jkflipper True True q = if (q==True) then False else True
 
 jk_gate :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
 jk_gate z (a:as) (b:bs) (c:cs) = z a b c : jk_gate z as bs cs
@@ -134,4 +134,3 @@ jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
 jkflipflop :: [Bool] -> [Bool] -> [Bool] -> [(Bool,Bool,Bool,Bool)]
 jkflipflop j c k =
 	let (q1,q2,q3,q4,q1q2,q1q2q3) = (jk_gate (\x y z -> jkflipper x y z) j c k, jk_gate (\x y z -> jkflipper x y z) q1 c q1, jk_gate (\x y z -> jkflipper x y z) q1q2 c q1q2, jk_gate (\x y z -> jkflipper x y z) q1q2q3 c q1q2q3, (and_gate q1 q2), (and_gate q1q2 q3)) in (jk_zipper (\p q r s -> (p,q,r,s)) q1 q2 q3 q4)
-
