@@ -122,5 +122,11 @@ jkflipper True c True = if (c==True) then False else True
 
 jk_gate :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
 jk_gate z (a:as) (b:bs) (c:cs) = z a b c : jk_gate z as bs cs
-jk_gate _ _ _ _ = []
+
+jk_zipper :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
+jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
+
+jkflipflop :: [Bool] -> [Bool] -> [Bool] -> [(Bool,Bool,Bool,Bool)]
+jkflipflop j c k =
+	let (q1,q2,q3,q4) = (jk_gate (\x y z -> jkflipper x y z) j c k, jk_gate (\x y z -> jkflipper x y z) q1 c q1, jk_gate (\x y z -> jkflipper x y z) (and_gate q1 q2) c (and_gate q1 q2), jk_gate (\x y z -> jkflipper x y z) (and_gate q3 (and_gate q1 q2)) c (and_gate q3 (and_gate q1 q2))) in (jk_zipper (\p q r s -> (p,q,r,s)) q1 q2 q3 q4)
 
