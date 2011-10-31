@@ -51,8 +51,8 @@ clock = not_gate clock
 
 -- and gate delays its output by 2 clock cycles
 and_gate :: [Bool] -> [Bool] -> [Bool]
---and_gate i1 i2 = delay 2 True (zipWith (&&) i1 i2)
-and_gate i1 i2 = (zipWith (&&) i1 i2)
+and_gate i1 i2 = delay 2 True (zipWith (&&) i1 i2)
+--and_gate i1 i2 = (zipWith (&&) i1 i2)
                                -- "zipWith" is similar to map
 							   -- but it takes a binary operator
 							   -- and two lists, and produces
@@ -101,10 +101,11 @@ srneg_latch s r =
 
 
 --JK Flip Flop take in 3 inputs: J, C and K
---The J and K ends always take in High from high stream
+--The J and K ends always take in High from the high stream
 --The C end is fed by the Clock stream
 --Outputs via the Q end
 --We are not interested in the Qbar end
+--Let's assume Q is all init to 0
 
 --  Various Modes for JK Flip Flop
 --    J  |  K  | Q
@@ -124,10 +125,13 @@ jkflipper True c True = if (c==True) then False else True
 jk_gate :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
 jk_gate z (a:as) (b:bs) (c:cs) = z a b c : jk_gate z as bs cs
 
+--Need to create new jk_gate predicate. Initial idea was wrong
+--jk_gate' j c k = foldl () [False] 
+
 jk_zipper :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
 jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
 
 jkflipflop :: [Bool] -> [Bool] -> [Bool] -> [(Bool,Bool,Bool,Bool)]
 jkflipflop j c k =
-	let (q1,q2,q3,q4) = (jk_gate (\x y z -> jkflipper x y z) j c k, jk_gate (\x y z -> jkflipper x y z) q1 c q1, jk_gate (\x y z -> jkflipper x y z) (and_gate q1 q2) c (and_gate q1 q2), jk_gate (\x y z -> jkflipper x y z) (and_gate q3 (and_gate q1 q2)) c (and_gate q3 (and_gate q1 q2))) in (jk_zipper (\p q r s -> (p,q,r,s)) q1 q2 q3 q4)
+	let (q1,q2,q3,q4,q1q2,q1q2q3) = (jk_gate (\x y z -> jkflipper x y z) j c k, jk_gate (\x y z -> jkflipper x y z) q1 c q1, jk_gate (\x y z -> jkflipper x y z) q1q2 c q1q2, jk_gate (\x y z -> jkflipper x y z) q1q2q3 c q1q2q3, (and_gate q1 q2), (and_gate q1q2 q3)) in (jk_zipper (\p q r s -> (p,q,r,s)) q1 q2 q3 q4)
 
