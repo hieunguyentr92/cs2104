@@ -99,10 +99,11 @@ srneg_latch s r =
 --  take 40 (srneg_latch ((set 6 False)++high) (set 15 True)++(set 6 False)++high)
 
 
---JK Flip Flop take in 3 inputs
+--JK Flip Flop take in 3 inputs: J, C and K
 --The J and K ends always take in High from high stream
 --The C end is fed by the Clock stream
 --Outputs via the Q end
+--We are not interested in the Qbar end
 
 --  Various Modes for JK Flip Flop
 --    J  |  K  | Q
@@ -112,5 +113,6 @@ srneg_latch s r =
 --    1  |  0  | Set Q=1
 --    1  |  1  | Toggle Q
 
-
-
+jk_gate :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
+jk_gate z (a:as) (b:bs) (c:cs) = z a b c : jk_gate z as bs cs
+jk_gate _ _ _ _ = []
