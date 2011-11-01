@@ -115,22 +115,40 @@ srneg_latch s r =
 --    1  |  0  | Set Q=1
 --    1  |  1  | Toggle Q
 
---jkflipper j k q
-jkflipper :: Bool -> Bool -> Bool -> Bool
-jkflipper False False q = q
-jkflipper False True _ = False
-jkflipper True False _ = True
-jkflipper True True q = if (q==True) then False else True
+--jk_zipper :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
+--jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
 
-jk_gate :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]
-jk_gate z (a:as) (b:bs) (c:cs) = z a b c : jk_gate z as bs cs
+--jkflipper j c k q
+jkflipper :: Bool -> Bool -> Bool -> Bool -> Bool
+jkflipper False True False q = q
+jkflipper False False False q = q
+jkflipper False True True _ = True
+jkflipper False False True _ = False
+jkflipper True True False _ = True
+jkflipper True False False _ = True
+jkflipper True True True q = q
+jkflipper True False True q = if (q==True) then False else True
 
---Need to create new jk_gate predicate. Initial idea was wrong
---jk_gate' j c k = foldl () [False] 
+--Tuple access
+first (a,b,c) = a
+second (a,b,c) = b
+third (a,b,c) = c
+
+--Takes in J C K, outputs Q
+--Has Q initialized with one False
+--Returns a list that looks like this: [False, ...] because Q for each gate is initialized to False
+jk_gate :: [Bool] -> [Bool] -> [Bool] -> [Bool]
+jk_gate j c k = gate_helper (zip3 j c k)
+
+gate_helper :: [(Bool,Bool,Bool)] -> [Bool]
+gate_helper s = fst (foldr (\(a,b,c) (d,e) -> if d==[] then (d++[jkflipper a b c False], False) else (d++[jkflipper a b c (last d)], jkflipper a b c (last d))) ([],False) s)
 
 jk_zipper :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
 jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
 
-jkflipflop :: [Bool] -> [Bool] -> [Bool] -> [(Bool,Bool,Bool,Bool)]
-jkflipflop j c k =
-	let (q1,q2,q3,q4,q1q2,q1q2q3) = (jk_gate (\x y z -> jkflipper x y z) j c k, jk_gate (\x y z -> jkflipper x y z) q1 c q1, jk_gate (\x y z -> jkflipper x y z) q1q2 c q1q2, jk_gate (\x y z -> jkflipper x y z) q1q2q3 c q1q2q3, (and_gate q1 q2), (and_gate q1q2 q3)) in (jk_zipper (\p q r s -> (p,q,r,s)) q1 q2 q3 q4)
+--jkflipflop :: [Bool] -> [Bool] -> [Bool] -> [(Bool,Bool,Bool,Bool)]
+--jkflipflop j c k = let (q1,q2,q3,q4) = (jk_gate j c k, jk_gate q1 c q1, jk_gate () c (), jk_gate () c ()) in jk_zipper (\p q r s -> (p,q,r,s)) q1 q2 q3 q4
+
+
+
+
