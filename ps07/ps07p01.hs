@@ -52,7 +52,6 @@ clock = not_gate clock
 -- and gate delays its output by 2 clock cycles
 and_gate :: [Bool] -> [Bool] -> [Bool]
 and_gate i1 i2 = delay 2 True (zipWith (&&) i1 i2)
---and_gate i1 i2 = (zipWith (&&) i1 i2)
                                -- "zipWith" is similar to map
 							   -- but it takes a binary operator
 							   -- and two lists, and produces
@@ -140,8 +139,4 @@ jk_zipper :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
 jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
 
 jkflipflop :: [Bool] -> [Bool] -> [Bool] -> [(Bool,Bool,Bool,Bool)]
-jkflipflop j c k = let (q1,q2,q1q2,q3,q1q2q3,q4) = (jk_gate j c k False, jk_gate q1 c q1 False, (and_gate q1 q2), jk_gate q1q2 c q1q2 False, (and_gate q1q2 q3), jk_gate (q1q2q3) c (q1q2q3) False) in jk_zipper (\p q r s -> (p,q,r,s)) q1 q2 q3 q4
-
-
-
-
+jkflipflop j c k = let (q1,q2,q3,q4) = (jk_gate j c k False, jk_gate q1 c q1 False, jk_gate (and_gate q1 q2) c (and_gate q1 q2) False, jk_gate (and_gate (and_gate q1 q2) q3) c (and_gate (and_gate q1 q2) q3) False) in jk_zipper (\p q r s -> (s,r,q,p)) q1 q2 q3 q4
