@@ -129,19 +129,11 @@ jkflipper True False False _ = True
 jkflipper True True True q = q
 jkflipper True False True q = if (q==True) then False else True
 
---Tuple access
-first (a,b,c) = a
-second (a,b,c) = b
-third (a,b,c) = c
-
 --Takes in J C K, outputs Q
 --Has Q initialized with one False
 --Returns a list that looks like this: [False, ...] because Q for each gate is initialized to False
 jk_gate :: [Bool] -> [Bool] -> [Bool] -> [Bool]
-jk_gate j c k = gate_helper (zip3 j c k)
-
-gate_helper :: [(Bool,Bool,Bool)] -> [Bool]
-gate_helper s = fst (foldr (\(a,b,c) (d,e) -> if d==[] then (d++[jkflipper a b c False], False) else (d++[jkflipper a b c (last d)], jkflipper a b c (last d))) ([],False) s)
+jk_gate j c k = 
 
 jk_zipper :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
 jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
