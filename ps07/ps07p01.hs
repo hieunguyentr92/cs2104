@@ -122,24 +122,25 @@ srneg_latch s r =
 jkflipper :: Bool -> Bool -> Bool -> Bool -> Bool
 jkflipper False True False q = q
 jkflipper False False False q = q
-jkflipper False True True _ = True
-jkflipper False False True _ = False
-jkflipper True True False _ = True
-jkflipper True False False _ = True
-jkflipper True True True q = q
-jkflipper True False True q = if (q==True) then False else True
+jkflipper False True True q = False
+jkflipper False False True q = q
+jkflipper True True False q = True
+jkflipper True False False q = q
+jkflipper True True True q = not q
+jkflipper True False True q = q
 
 --Takes in J C K, outputs Q
 --Has Q initialized with one False
 --Returns a list that looks like this: [False, ...] because Q for each gate is initialized to False
 jk_gate :: [Bool] -> [Bool] -> [Bool] -> Bool -> [Bool]
-jk_gate (j:js) (c:cs) (k:ks) q = (jkflipper j c k q):(jk_gate js cs ks (jkflipper j c k q))
+--jk_gate (j:js) (c:cs) (k:ks) q = (jkflipper j c k q):(jk_gate js cs ks (jkflipper j c k q))
+jk_gate (j:js) (c:cs) (k:ks) q = q:(jk_gate js cs ks (jkflipper j c k q))
 
 jk_zipper :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
 jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
 
---jkflipflop :: [Bool] -> [Bool] -> [Bool] -> [(Bool,Bool,Bool,Bool)]
---jkflipflop j c k = let (q1,q2,q3,q4) = (jk_gate j c k, jk_gate q1 c q1, jk_gate () c (), jk_gate () c ()) in jk_zipper (\p q r s -> (p,q,r,s)) q1 q2 q3 q4
+jkflipflop :: [Bool] -> [Bool] -> [Bool] -> [(Bool,Bool,Bool,Bool)]
+jkflipflop j c k = let (q1,q2,q1q2,q3,q1q2q3,q4) = (jk_gate j c k False, jk_gate q1 c q1 False, (and_gate q1 q2), jk_gate q1q2 c q1q2 False, (and_gate q1q2 q3), jk_gate (q1q2q3) c (q1q2q3) False) in jk_zipper (\p q r s -> (p,q,r,s)) q1 q2 q3 q4
 
 
 
