@@ -132,8 +132,8 @@ jkflipper True False True q = if (q==True) then False else True
 --Takes in J C K, outputs Q
 --Has Q initialized with one False
 --Returns a list that looks like this: [False, ...] because Q for each gate is initialized to False
-jk_gate :: [Bool] -> [Bool] -> [Bool] -> [Bool]
-jk_gate j c k = 
+jk_gate :: [Bool] -> [Bool] -> [Bool] -> Bool -> [Bool]
+jk_gate (j:js) (c:cs) (k:ks) q = (jkflipper j c k q):(jk_gate js cs ks (jkflipper j c k q))
 
 jk_zipper :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
 jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
