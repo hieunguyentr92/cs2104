@@ -71,8 +71,8 @@ stream.
 To conclude, for each function in Haskell that
 handles infinite lists, the Python
 implementation is via generators. In this
-generator we "tell" it how the original function
-works in Haskell.
+generator we then "tell" it how the original
+function works in Haskell.
 
 """
 
