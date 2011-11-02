@@ -39,19 +39,22 @@ def ints2(k):
 #         yield next(g)
 
 def zipwith(f,i,j):
-    yield f(next(i),next(j))
-    g=zipwith(f,i,j)
+    left=next(i)
+    right=next(j)
+    yield f(left,right)
+    g=zipwith(f,ints2(left+right),ints2(left+right))
+    while True:
+        yield next(g)
+
+def zipwith1(f,list1,list2):
+    yield f(list1.pop(0),list2.pop(0))
+    g=zipwith1(f,list1,list2)
     while True:
         yield next(g)
 
 i=ints2(0)
 j=ints2(1)
 output = zipwith((lambda x,y:x+y),i,j)
-print next(output)
-print next(output)
-print next(output)
-print next(output)
-print next(output)
 print next(output)
 print next(output)
 print next(output)
