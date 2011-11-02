@@ -97,13 +97,7 @@ srneg_latch s r =
 --
 --  take 40 (srneg_latch ((set 6 False)++high) (set 15 True)++(set 6 False)++high)
 
---JK Flip Flop take in 3 inputs: J, C and K
---The J and K ends always take in High from the high stream
---The C end is fed by the Clock stream
---Outputs via the Q end
---We are not interested in the Qbar end
---Let's assume Q is all init to 0
-
+--JK Flip Flop
 --  Various Modes for JK Flip Flop
 --    J  |  K  | Q
 --  ---------------------------
@@ -111,6 +105,30 @@ srneg_latch s r =
 --    0  |  1  | Set Q=0
 --    1  |  0  | Set Q=1
 --    1  |  1  | Toggle Q
+
+--3-input AND gate
+and_gate3 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
+and_gate3 i1 i2 i3 = (zipWith (&&) i1 (zipWith (&&) i2 i3))
+
+--NAND gate with a 2-input AND
+nand_gate :: [Bool] -> [Bool] -> [Bool]
+nand_gate i1 i2 = not_gate (and_gate i1 i2)
+
+--NAND gate with a 3-input AND
+nand_gate3 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
+nand_gate3 i1 i2 i3 = not_gate (and_gate3 i1 i2 i3)
+
+jk_gate1 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
+jk_gate1 j c k =
+	let (q,qbar,w1,w2) =
+		(nand_gate w1 qbar,
+		nand_gate q w2,
+		nand_gate3 qbar j c,
+		nand_gate3 c k q
+		) in q
+
+and_gate1 :: [Bool] -> [Bool] -> [Bool]
+and_gate1 i1 i2 = (zipWith (&&) i1 i2)
 
 --jkflipper j c k q
 jkflipper :: Bool -> Bool -> Bool -> Bool -> Bool
@@ -123,9 +141,6 @@ jkflipper True False False q = q
 jkflipper True True True q = not q
 jkflipper True False True q = q
 
---Takes in J C K, outputs Q
---Has Q initialized with one False
---Returns a list that looks like this: [False, ...] because Q for each gate is initialized to False
 jk_gate :: [Bool] -> [Bool] -> [Bool] -> Bool -> [Bool]
 jk_gate (j:js) (c:cs) (k:ks) q = q:(jk_gate js cs ks (jkflipper j c k q))
 
@@ -133,4 +148,4 @@ jk_zipper :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
 jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
 
 jkflipflop :: [Bool] -> [Bool] -> [Bool] -> [(Bool,Bool,Bool,Bool)]
-jkflipflop j c k = let (q1,q2,q3,q4) = (jk_gate j c k False, jk_gate q1 c q1 False, jk_gate (and_gate q1 q2) c (and_gate q1 q2) False, jk_gate (and_gate (and_gate q1 q2) q3) c (and_gate (and_gate q1 q2) q3) False) in jk_zipper (\p q r s -> (s,r,q,p)) q1 q2 q3 q4
+jkflipflop j c k = let (q1,q2,q3,q4) = (jk_gate j c k False, jk_gate q1 c q1 False, jk_gate (and_gate1 q1 q2) c (and_gate1 q1 q2) False, jk_gate (and_gate1 (and_gate1 q1 q2) q3) c (and_gate1 (and_gate1 q1 q2) q3) False) in jk_zipper (\p q r s -> (s,r,q,p)) q1 q2 q3 q4
