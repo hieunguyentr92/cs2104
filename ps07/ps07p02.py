@@ -26,12 +26,23 @@ def ints():
     for x in mapgen(lambda x:x+1,ints)():
 	    yield x
 
+def ints2(k):
+    yield k
+    g=ints2(k+1)
+    while True:
+        yield next(g)
+
+def zipwith(f,list1,list2):
+    yield f(list1.pop(0),list2.pop(0))
+    g=zipwith(f,list1,list2)
+    while True:
+        yield next(g)
+
+j = zipwith((lambda x,y:x+y),[1,2,3],[1,2,3])
+print next(j)
+print next(j)
+print next(j)
+
 # Do we need to find out which is the smaller list?
 # Because the output list's size is bounded by that smaller list
 # Function f must be a operation that takes 2 arguments
-def zipwith(f,g1,g2):
-    def rets():
-        yield f(head(g1),head(g2))
-        for x in zipwith(f, tail(g1), tail(g2))():
-            yield x
-    return rets
