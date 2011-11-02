@@ -39,7 +39,6 @@ delay n fill s = (set n fill) ++ s
 not_gate :: [Bool] -> [Bool]
 not_gate s = delay 1 True (map not s)
 
-
 -- a clock can be obtained by connecting an inverter's output to its input
 --         |\       Clock
 --      +--| >o----+--
@@ -52,8 +51,6 @@ clock = not_gate clock
 -- and gate delays its output by 2 clock cycles
 and_gate :: [Bool] -> [Bool] -> [Bool]
 and_gate i1 i2 = delay 2 True (zipWith (&&) i1 i2)
---this line to test without delay
---and_gate i1 i2 = (zipWith (&&) i1 i2)
                                -- "zipWith" is similar to map
 							   -- but it takes a binary operator
 							   -- and two lists, and produces
@@ -100,7 +97,6 @@ srneg_latch s r =
 --
 --  take 40 (srneg_latch ((set 6 False)++high) (set 15 True)++(set 6 False)++high)
 
-
 --JK Flip Flop take in 3 inputs: J, C and K
 --The J and K ends always take in High from the high stream
 --The C end is fed by the Clock stream
@@ -115,16 +111,6 @@ srneg_latch s r =
 --    0  |  1  | Set Q=0
 --    1  |  0  | Set Q=1
 --    1  |  1  | Toggle Q
-
-nand_gate2 :: [Bool] -> [Bool] -> [Bool]
-nand_gate2 i1 i2 = not_gate (and_gate i1 i2)
-
-nand_gate3 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
-nand_gate3 i1 i2 i3 = not_gate (and_gate (and_gate i1 i2) (delay 2 True i3))
-
-jk_gate1 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
-jk_gate1 j c k = 
-	let (q,qbar,w1,w2) = (nand_gate2 w1 qbar, nand_gate2 q w2, nand_gate3 qbar j c, nand_gate3 c k q) in q
 
 --jkflipper j c k q
 jkflipper :: Bool -> Bool -> Bool -> Bool -> Bool
