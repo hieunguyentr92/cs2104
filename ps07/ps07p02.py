@@ -32,6 +32,50 @@ def ints2(k):
     while True:
         yield next(g)
 
+"""
+Description of the Systematic Translation Scheme
+------------------------------------------------
+Consider the given mapgen() function
+In Haskell, the map function is used with 2
+arguments:
+    1. the function
+    2. the list
+Following this pattern, zipwithgen() takes in 2
+arguments, namely g1 and g2, and f is the
+function to zip the 2 lists with (as in zipWith
+of Haskell)
+
+Just like how Haskell's zipWith would handle
+infinite lists by applying the function to the
+head of both lists first and then their tails,
+in this Python implementation, we make use of
+the given head() to retrieve the first iteration
+of the generators, before proceeding to applying
+recursively to the tails
+
+In the n-th position of the Fibonacci sequence,
+the value is computed by adding the (n-1)-th
+and (n-2)-th number. Therefore, we must "yield
+0" and "yield 1", to start the ball rolling.
+
+The Haskell implementation is:
+fib :: Int -> Integer
+fib n = fibs !! n
+    where
+        fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
+    
+Following suit, we pass in fib() into
+zipwithgen() as g1 recursively to generate the
+stream.
+
+To conclude, for each function in Haskell that
+handles infinite lists, the Python
+implementation is via generators. In this
+generator we "tell" it how the original function
+works in Haskell.
+
+"""
+
 def zipwithgen(f,g1,g2):
     def rets():
         yield f(head(g1),head(g2))
