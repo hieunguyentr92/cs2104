@@ -32,17 +32,28 @@ def ints2(k):
     while True:
         yield next(g)
 
-def zipwith(f,list1,list2):
-    yield f(list1.pop(0),list2.pop(0))
-    g=zipwith(f,list1,list2)
+# def zipwith(f,list1,list2):
+#     yield f(list1.pop(0),list2.pop(0))
+#     g=zipwith(f,list1,list2)
+#     while True:
+#         yield next(g)
+
+def zipwith(f,i,j):
+    yield f(next(i),next(j))
+    g=zipwith(f,i,j)
     while True:
         yield next(g)
 
-j = zipwith((lambda x,y:x+y),[1,2,3],[1,2,3])
-print next(j)
-print next(j)
-print next(j)
-
-# Do we need to find out which is the smaller list?
-# Because the output list's size is bounded by that smaller list
-# Function f must be a operation that takes 2 arguments
+i=ints2(0)
+j=ints2(1)
+output = zipwith((lambda x,y:x+y),i,j)
+print next(output)
+print next(output)
+print next(output)
+print next(output)
+print next(output)
+print next(output)
+print next(output)
+print next(output)
+print next(output)
+print next(output)
