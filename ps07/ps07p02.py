@@ -65,8 +65,8 @@ fib n = fibs !! n
         fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
     
 Following suit, we pass in fib() into
-zipwithgen() as g1 recursively to generate the
-stream.
+zipwithgen() as g1, and the tail of fib()
+recursively to generate the stream.
 
 To conclude, for each function in Haskell that
 handles infinite lists, the Python
@@ -91,9 +91,8 @@ def fib():
         yield x
 
 i=fib()
-print next(i)
-print next(i)
-print next(i)
-print next(i)
-print next(i)
-print next(i)
+k=1
+while True:
+    print next(i)
+    k+=1
+    if (k>15): break;
