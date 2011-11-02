@@ -116,8 +116,15 @@ srneg_latch s r =
 --    1  |  0  | Set Q=1
 --    1  |  1  | Toggle Q
 
---jk_zipper :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
---jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
+nand_gate2 :: [Bool] -> [Bool] -> [Bool]
+nand_gate2 i1 i2 = not_gate (and_gate i1 i2)
+
+nand_gate3 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
+nand_gate3 i1 i2 i3 = not_gate (and_gate (and_gate i1 i2) (delay 2 True i3))
+
+jk_gate1 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
+jk_gate1 j c k = 
+	let (q,qbar,w1,w2) = (nand_gate2 w1 qbar, nand_gate2 q w2, nand_gate3 qbar j c, nand_gate3 c k q) in q
 
 --jkflipper j c k q
 jkflipper :: Bool -> Bool -> Bool -> Bool -> Bool
@@ -134,7 +141,6 @@ jkflipper True False True q = q
 --Has Q initialized with one False
 --Returns a list that looks like this: [False, ...] because Q for each gate is initialized to False
 jk_gate :: [Bool] -> [Bool] -> [Bool] -> Bool -> [Bool]
---jk_gate (j:js) (c:cs) (k:ks) q = (jkflipper j c k q):(jk_gate js cs ks (jkflipper j c k q))
 jk_gate (j:js) (c:cs) (k:ks) q = q:(jk_gate js cs ks (jkflipper j c k q))
 
 jk_zipper :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
