@@ -81,7 +81,6 @@ srneg_latch :: [Bool]->[Bool]->[Bool]
 srneg_latch s r = 
   let (q,qbar,w1,w2) = (not_gate w1,not_gate w2,and_gate s qbar,and_gate r q) in q
 
-  
 -- Consider now the following signals: (each dash represents 1 clock cycle)
 --
 --                +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
@@ -106,6 +105,12 @@ srneg_latch s r =
 --    1  |  0  | Set Q=1
 --    1  |  1  | Toggle Q
 
+--I have created 2 versions:
+--	1. display1()
+--		I created the JK-Gate myself, and implemented the truth table with it. Feels like I'm cheating because a JK Flip-flop is actually made up of 4 NAND gates
+--	2. display()
+--		Built using NAND gates, but cannot get a JK-gate output in the manner [... True, True, False, False, True, True, False, False] when supplied with J=K=True
+
 --3-input AND gate
 and_gate3 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
 and_gate3 i1 i2 i3 = (zipWith (&&) i1 (zipWith (&&) i2 i3))
@@ -120,11 +125,11 @@ nand_gate3 i1 i2 i3 = not_gate (and_gate3 i1 i2 i3)
 
 jk_gate2 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
 jk_gate2 j c k =
-	let (q,qbar,w1,w2) =
-		(nand_gate w1 qbar,
+	let (w1,w2,qbar,q) =
+		(nand_gate3 qbar j c,
+		nand_gate3 c k q,
 		nand_gate q w2,
-		nand_gate3 qbar j c,
-		nand_gate3 c k q
+		nand_gate w1 qbar
 		) in q
 
 and_gate1 :: [Bool] -> [Bool] -> [Bool]
@@ -147,8 +152,8 @@ jk_gatehelper (j:js) (c:cs) (k:ks) q = q:(jk_gatehelper js cs ks (jkflipper j c 
 jk_gate :: [Bool] -> [Bool] -> [Bool] -> [Bool]
 jk_gate j c k = delay 0 True (delay 1 False (jk_gatehelper j c k False))
 
---jk_gate1 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
---jk_gate1 j c k = delay 0 True (delay 1 False (jk_gatehelper j c k False))
+jk_gate1 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
+jk_gate1 j c k = delay 0 True (delay 1 False (jk_gatehelper j c k False))
 
 jk_zipper :: (a -> b -> c -> d -> e) -> [a] -> [b] -> [c] -> [d] -> [e]
 jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
@@ -156,8 +161,8 @@ jk_zipper z (a:as) (b:bs) (c:cs) (d:ds) = z a b c d : jk_zipper z as bs cs ds
 jkflipflop :: [Bool] -> [Bool] -> [Bool] -> [(Bool,Bool,Bool,Bool)]
 jkflipflop j c k = let (q1,q2,q3,q4) = (delay 10 True (jk_gate j c k), delay 8 True (jk_gate q1 c q1), delay 6 True (jk_gate (and_gate q1 q2) c (and_gate q1 q2)), delay 4 True (jk_gate (and_gate (and_gate q1 q2) q3) c (and_gate (and_gate q1 q2) q3))) in jk_zipper (\p q r s -> (s,r,q,p)) q1 q2 q3 q4
 
---jkflipflop1 :: [Bool] -> [Bool] -> [Bool] -> [(Bool,Bool,Bool,Bool)]
---jkflipflop1 j c k = let (q1,q2,q3,q4) = (jk_gate1 j c k, jk_gate1 q1 c q1, jk_gate1 (and_gate1 q1 q2) c (and_gate1 q1 q2), jk_gate1 (and_gate1 (and_gate1 q1 q2) q3) c (and_gate1 (and_gate1 q1 q2) q3)) in jk_zipper (\p q r s -> (s,r,q,p)) q1 q2 q3 q4
+jkflipflop1 :: [Bool] -> [Bool] -> [Bool] -> [(Bool,Bool,Bool,Bool)]
+jkflipflop1 j c k = let (q1,q2,q3,q4) = (jk_gate1 j c k, jk_gate1 q1 c q1, jk_gate1 (and_gate1 q1 q2) c (and_gate1 q1 q2), jk_gate1 (and_gate1 (and_gate1 q1 q2) q3) c (and_gate1 (and_gate1 q1 q2) q3)) in jk_zipper (\p q r s -> (s,r,q,p)) q1 q2 q3 q4
 
 booleanconvert a = if a==True then 1 else 0
 
