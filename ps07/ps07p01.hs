@@ -94,7 +94,7 @@ srneg_latch s r =
 --  The following expression, when evaluated at the top level (you will have to cut and paste), 
 --  will return the the Q signal of the latch for the first 40 clock cycles
 --
---  take 40 (srneg_latch ((set 6 False)++high) (set 15 True)++(set 6 False)++high)
+--  take 40 (srneg_latch ((set 6 False)++high) ((set 15 True)++(set 6 False)++high))
 
 --JK Flip Flop
 --  Various Modes for JK Flip Flop
@@ -113,7 +113,7 @@ srneg_latch s r =
 
 --3-input AND gate
 and_gate3 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
-and_gate3 i1 i2 i3 = (zipWith (&&) i1 (zipWith (&&) i2 i3))
+and_gate3 i1 i2 i3 = delay 2 True (zipWith (&&) i1 (zipWith (&&) i2 i3))
 
 --NAND gate with a 2-input AND
 nand_gate :: [Bool] -> [Bool] -> [Bool]
@@ -121,15 +121,16 @@ nand_gate i1 i2 = not_gate (and_gate i1 i2)
 
 --NAND gate with a 3-input AND
 nand_gate3 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
-nand_gate3 i1 i2 i3 = not_gate (and_gate3 i1 i2 i3)
+--nand_gate3 i1 i2 i3 = not_gate (and_gate3 i1 i2 i3)
+nand_gate3 i1 i2 i3 = not_gate (and_gate (and_gate i1 i2) i3)
 
 jk_gate2 :: [Bool] -> [Bool] -> [Bool] -> [Bool]
 jk_gate2 j c k =
-	let (w1,w2,qbar,q) =
-		(nand_gate3 qbar j c,
-		nand_gate3 c k q,
+	let (q,qbar,w1,w2) =
+		(nand_gate w1 qbar,
 		nand_gate q w2,
-		nand_gate w1 qbar
+		nand_gate3 qbar j c,
+		nand_gate3 c k q
 		) in q
 
 and_gate1 :: [Bool] -> [Bool] -> [Bool]
