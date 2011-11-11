@@ -1,4 +1,3 @@
-/*
 declare
 fun {DConsume ?Xs A Limit}
    if Limit>0 then
@@ -18,7 +17,7 @@ local Xs S in
    thread S={DConsume Xs 0 5} end
    {Browse S}
 end
-*/
+
 declare
 proc {Buffer N Xs Ys}
    fun {Startup N ?Xs}
@@ -38,8 +37,9 @@ in
 end
 
 local Xs Ys in
-   Xs = [1 2 3]
-   {Buffer 10 Xs Ys}
+   thread {DProduce 0 Xs} end
+   thread {Buffer 3 Xs Ys} end
+   thread {DConsume Ys A Limit} end
    {Browse Ys}
 end
 
