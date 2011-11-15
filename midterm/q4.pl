@@ -9,11 +9,6 @@
 :- op(947,fx,while).
 :- op(946,xfx,do).
 
-initCheck(P, IncorrectInit, IncorrectUsed) :-
-	check(P, [], DefOut, [], InitOut, [], UsedOut, Lev),
-	writeln([d=DefOut,i=InitOut,u=UsedOut]).
-
-
 % checkExpr will handle either integer, a single atom or an expression 
 checkExpr(N,_,InitIn,InitOut,UsedIn,UsedOut) :-
 	integer(N),!.
@@ -59,3 +54,11 @@ check((S1;S2),DefIn,DefOut,InitIn,InitOut,UsedIn,UsedOut,Lev) :-
 check({S},DefIn,DefOut,InitIn,InitOut,UsedIn,UsedOut,Lev) :-
 	L1 is Lev+1,
 	check(S2,DefIn,DefOut,InitIn,InitOut,UsedIn,UsedOut,L1).
+
+:- P = (
+		x = 1
+	).
+
+initCheck(P, IncorrectInit, IncorrectUsed) :-
+	check(P, [], DefOut, [], InitOut, [], UsedOut, Lev),
+	writeln([d=DefOut,i=InitOut,u=UsedOut]).
