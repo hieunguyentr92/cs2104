@@ -1,61 +1,80 @@
-// HENG LOW WEE
-// U096901R
-// CS2104 Tut 10 Question 1
-
 #include <stdio.h>
 #include <setjmp.h>
 
-int no_exception = 0;
-int exception1 = 1;
-int exception2 = 2;
-int exception3 = 3;
-
 struct Exception {
-	int exception_type;
-	char * msg;
-};
+    enum{
+        NOEXCEPTION,E1,E2,E3
+    }type;
+    char* msg;
+} ex;
 
-struct Exception e;
-jmp_buf * pop();
-jmp_buf * push();
+jmp_buf stack[100];
+int sp = -1;
 
-struct ExceptionExample {
-	
-};
+jmp_buf* push(){
+    return &stack[++sp];
+}
 
-// void ExceptionExample_first (struct Exception * e, int a, int b) {
-	
-// }
+jmp_buf* pop(){
+    return &stack[sp--];
+}
 
-// void ExceptionExample_second (struct Exception * e, int b) {
-// 	if (e->b==1) 
-// 	if (e->b==2)
-// 	printf("In second\n");
-// }
+void second(int b){
+    if(b==1){
+        ex.type=E2;
+        ex.msg = "Exception 2 from second";
+        longjmp(*pop(),1);
+    }
+    if(b==2){
+        ex.type=E3;
+        ex.msg ="Exception 3 from second";
+        longjmp(*pop(),1);
+    }
+    printf("In second");
+}
 
-int main (int argc, char *argv[]) {
-	if (!setjmp(*push())) {
-		first(atoi(argv[1],atoi(argv[2])));
-		printf("This might not get printed\n");
-	}
-	else {
-		switch ( Exception.exception_type ) {
-			case exception1:
-				printf(Exception.msg);
-				goto finally_clause;
+void first(int a, int b){
+    if(!setjmp(*push())){
+        if(a==1){
+            ex.type=E1;
+            ex.msg = "Exception 1 from first";
+            longjmp(*pop(),1);
+        }
+        second(b);
+        pop();
+    } else{
+        switch(ex.type){
+            case E3:
+                printf(ex.msg);
+                ex.type=NOEXCEPTION;
+                goto finally;
+            default:
+            finally:
+                printf("In first");
+            if(ex.type != NOEXCEPTION)
+                longjmp(*pop(),1);
+        }
+    }
+    printf("In first: this might not always get printed");
+}
 
-			case exception2:
-				printf(Exception.msg);
-				goto finally_clause;
-
-			default:
-				break;
-
-			finally_clause:
-				if (Exception.exception_type != no_exception) {
-					longjmp(pop(),1);
-				}
-		}	
-	}
-	return 0;
+int main(int argc,char** args){
+    if(!setjmp(*push())){
+        first(0,2);
+        printf("This might not get printed");
+        pop();
+    } else{
+        switch(ex.type){
+            case E1:
+            case E2:
+                printf(ex.msg);
+                ex.type=NOEXCEPTION;
+                goto finally;
+            default:
+            finally:
+                if(ex.type!=NOEXCEPTION){
+                    longjmp(*pop(),1);
+                }
+        }
+    }
 }
