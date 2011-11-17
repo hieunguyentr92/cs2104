@@ -55,4 +55,5 @@ int main(int argc, char** argv) {
 	x = atoi(argv[1]);
 	f();
 	pop();
+	return 1;
 }
