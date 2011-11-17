@@ -22,9 +22,9 @@ int pascal_cps (int n, int k) {
 }
 
 int main () {
-	int n = 10;
-	int k = 5;
+	int n = 2;
+	int k = 1;
 	printf("pascal = %d\n", pascal(n,k));
-	printf("pascal_cps = %d\n", pascal_cps(n,k));
+	//printf("pascal_cps = %d\n", pascal_cps(n,k));
 	return 1;
 }
