@@ -11,7 +11,7 @@ int pascal_cps (int n, int k) {
 			int j2 (int ret2) {
 				return j(ret+ret2);
 			}
-			return aux(n-1,k-1, j2);
+			return aux(n-1,k-1,j2);
 		}
 
 		if (n==0 || n==k) return j(1);
