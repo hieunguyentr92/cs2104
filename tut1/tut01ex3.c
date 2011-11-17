@@ -6,14 +6,15 @@ unsigned char M[10000] ;
 
 void exec() {
 	eax = *(int*)&M[ebx] ; // gets the first element and assigns to eax
-	printf("eax = %d\n", eax);
 	edx = ebx ;
 	loop:
 		edx += 1 ;
+		edi = edx;
+		edi *= 4;
 		if ( edx < ecx ) goto then_branch;
 		goto return_p ;
 	then_branch:
-		esi = *(int*)&M[edx] ;
+		esi = *(int*)&M[edi] ;
 		if ( esi < eax ) goto then_branch2 ;
 		goto loop ;
 	then_branch2:
@@ -23,14 +24,15 @@ void exec() {
 }
 
 int main() {
-	// assume 'a' is the given array of integers
-	// assume ecx is given
-	int a[] = {11,51,23,66,34};
+	*(int*)&M[0] = 20;
+	*(int*)&M[4] = 54;
+	*(int*)&M[8] = 3;
+	*(int*)&M[12] = 76;
+	*(int*)&M[16] = 92;
+	ebx = 0;
 	ecx = 5;
-	ebx = (int*)memcpy(M[2000], a, ecx*4);
-	// multiply by 4 because int is 4 bytes
-	printf("ebx = %d\n", ebx);
 	exec();
+	printf("Mininum expected is eax = 3\n");
 	printf("Mininum = %d\n", eax);
 	return 0;
 }
