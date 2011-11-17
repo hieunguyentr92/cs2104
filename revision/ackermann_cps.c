@@ -26,7 +26,7 @@ int ackermann_cps (int m, int n) {
 }
 
 int main () {
-	printf("ackermann(3,2) = %d\n", ackermann(3,2));
-	printf("ackermann_cps(3,2) = %d\n", ackermann_cps(3,2));
+	printf("ackermann(4,3) = %d\n", ackermann(4,3));
+	printf("ackermann_cps(4,3) = %d\n", ackermann_cps(4,3));
 	return 1;
 }
