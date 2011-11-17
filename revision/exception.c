@@ -27,9 +27,6 @@ void g() {
 			ex.msg = "Exception from g";
 			longjmp(*pop(),1);
 		}
-		else {
-			pop();
-		}
 	}
 }
 
