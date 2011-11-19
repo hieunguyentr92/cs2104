@@ -86,7 +86,6 @@ def zipwithgen(f,g1,g2):
 def fib():
     yield 0
     yield 1
-    g=zipwithgen((lambda x,y:x+y),fib,tail(fib))
     for x in zipwithgen((lambda x,y:x+y),fib,tail(fib))():
         yield x
 
