@@ -143,7 +143,6 @@ int main() {
 	hanoi(&p,4,1,2,3) ; // build the string of moves for 4 discs 
 	*p = '\0' ; // terminate the string
 	printf(a) ; // string could be printed, but not in VAL code
-
 	//exec();
 	return 0;
 } 
