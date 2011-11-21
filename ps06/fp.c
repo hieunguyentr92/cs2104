@@ -2,8 +2,8 @@
 
 void hanoi(char ** p, int n, int a, int b, int c) {
 	int aux (char ** p, int n, int a, int b, int c, int(*j)(int)) {
-		int j1 (int ret) {
-			int j2 (int ret2) {
+		int j1 (char ** ret) {
+			int j2 (char ** ret2) {
 				**p = '0'+(char)a ;
 				(*p) ++ ;
 				**p = ' ' ;
@@ -17,7 +17,7 @@ void hanoi(char ** p, int n, int a, int b, int c) {
 				**p = '0'+(char)b ;
 				(*p) ++ ;
 				**p = '\n' ;
-				(*p) ++ ;	
+				(*p) ++ ;
 			}
 			return aux(p, n-1, c, b, a, j2);
 		}
