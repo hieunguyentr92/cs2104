@@ -36,6 +36,29 @@ primeList(In, Out, X, N) :-
 
 primes(N) :- primeList([], _, 2, N).
 
-:- primes(100).
 
+reverse([],[]).
+reverse([Head|Tail], Reversed) :-
+	reverse(Tail, RevRest),
+	append(RevRest,[Head],Reversed).
+
+prefix_sum([],X) :- X is 0.
+prefix_sum(ListIn) :-
+	prefix_helper(ListIn, 0, []).
+	
+prefix_helper([],_,Aux) :- writeln(Aux).
+prefix_helper(ListIn,Acc,ListOut) :-
+	ListIn = [Head|Tail],
+	Sum is Head + Acc,
+	append(ListOut,[Sum],Aux),
+	prefix_helper(Tail,Sum,Aux),!.
+
+list_con([]).
+list_con([_]).
+list_con([H1|T1]) :-
+	T1 = [H2|_],
+	Val is H2-H1,
+	(Val = 1
+	-> list_con(T1)
+	; false),!.
 
